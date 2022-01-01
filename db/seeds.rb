@@ -5,3 +5,10 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+if OxfordWord.count.zero?
+    File.foreach("app/assets/oxford_3000/the_oxford_3000.txt", chomp: true) do |word|
+      OxfordWord.create(word: word)
+    end
+  end
+  

@@ -1,0 +1,54 @@
+<% content_for :javascript_includes do %>
+  <%= javascript_include_tag "oxford_words.js" %>
+<% end %>
+<div class="container-remember">
+  <div class="content-remember">
+    <h1 class="title" >คำศัพท์</h1>
+    <div class="row">
+      <% @oxford_words.each do |w| %>
+        <div class="word col-lg-3 col-md-4 col-sm-4 col-6">
+          <% can_remember_word =  w.remember_words.map(&:can_remember)[0] %>
+          <% marked_word =  w.remember_words.map(&:marked)[0] %>
+          <a href="#" role="button" 
+            id="dropdownMenuLink<%= w.id %>" 
+            data-bs-toggle="dropdown" 
+            aria-expanded="false"
+            style="
+            <%= 'background:#ffff89; font-weight: 600; border-radius: 5px;' if can_remember_word %> 
+            <%= 'text-decoration: underline; text-decoration-color: red; text-decoration-thickness: 3px;' if marked_word %>" 
+            >
+            <%= w.word %>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink<%= w.id %>">
+            <% if can_remember_word %>
+              <li><button class="dropdown-item" id="remember-<%= w.id %>"onclick="remember(this)" style="display:none;">จำได้</button></li>
+              <li><button class="dropdown-item" id="cancle_remember-<%= w.id %>"onclick="cancle_remember(this)">ลืม</button></li>
+            <% else %>
+              <li><button class="dropdown-item" id="remember-<%= w.id %>"onclick="remember(this)">จำได้</button></li>
+              <li><button class="dropdown-item" id="cancle_remember-<%= w.id %>"onclick="cancle_remember(this)" style="display:none;">ลืม</button></li>
+            <% end %>
+            <% if marked_word %>
+              <li><button class="dropdown-item" id="marked-<%= w.id %>" onclick="marked(this)" style="display:none;">mark</button></li>
+              <li><button class="dropdown-item" id="cancle_marked-<%= w.id %>" onclick="cancle_marked(this)">unmark</button></li>
+            <% else %>
+              <li><button class="dropdown-item" id="marked-<%= w.id %>" onclick="marked(this)">mark</button></li>
+              <li><button class="dropdown-item" id="cancle_marked-<%= w.id %>" onclick="cancle_marked(this)" style="display:none;">unmark</button></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="sind-bar">
+    <div class="link-char">
+      <% ('A'..'Z').to_a.each do |char| %>
+        <div class="link-char-item"><%= link_to "#{char}", oxford_words_path(char) %></div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<script>
+  const host = '<%= request.url.split("/")[0..2].join("/") %>'
+</script>
+
+
