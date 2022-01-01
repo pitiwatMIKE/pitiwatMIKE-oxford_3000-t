@@ -1,0 +1,2 @@
+class RememberWord < ApplicationRecord
+end
